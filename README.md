@@ -1,13 +1,18 @@
 # diable-path-traversal
 Conteneur Docker vulnérable pour Path Traversal - Projet DIABLE Master 2 DSI
 
-
+---
 title: "Path Traversal (Directory Traversal)"
+
 tag: "File System / LFI"
+
 difficulty: "Facile"
+
 goal: "Accéder à des fichiers système non autorisés, voler des données sensibles, évoluer vers LFI/RCE."
+
 fix: "Validation stricte des chemins, whitelist des fichiers autorisés, utilisation de basename(), contexte sécurisé."
 
+---
 
 # Théorie
 
@@ -51,7 +56,7 @@ sur des listes de permissions explicites, et non sur des chemins fournis par l'u
 
 
 # Lab
-Objectif du lab
+## Objectif du lab
 
 Observer comment une entrée utilisateur (paramètre de fichier) est utilisée pour accéder au système de fichiers, et réussir à lire des fichiers sensibles en dehors du répertoire autorisé.
 Règles
@@ -64,7 +69,7 @@ Règles
 
 - Documenter chaque fichier sensible découvert
 
-Accès
+## Accès
 
     URL : http://[IP]:[PORT]/index.php
 
@@ -73,3 +78,21 @@ Accès
     Répertoire autorisé : /var/www/html/uploads/
 
     Indice : Observer les messages d'erreur pour comprendre la structure des dossiers
+
+
+## Débrief
+### Pourquoi ça a fonctionné ?
+
+Parce que l'application a construit un chemin de fichier en concaténant directement l'entrée utilisateur avec un répertoire de base, sans vérifier que le chemin final se trouve bien dans le répertoire autorisé.
+Où était la vulnérabilité ?
+
+Typiquement dans une zone du code qui fait :
+
+    $user_file = $_GET['file'];
+    $full_path = "/var/www/html/uploads/" . $user_file;
+    readfile($full_path);
+
+Ou pire :
+    
+    include($_GET['page'] . '.php');
+
