@@ -1,13 +1,13 @@
 # diable-path-traversal
 Conteneur Docker vulnérable pour Path Traversal - Projet DIABLE Master 2 DSI
 
----
+
 title: "Path Traversal (Directory Traversal)"
 tag: "File System / LFI"
 difficulty: "Facile"
 goal: "Accéder à des fichiers système non autorisés, voler des données sensibles, évoluer vers LFI/RCE."
 fix: "Validation stricte des chemins, whitelist des fichiers autorisés, utilisation de basename(), contexte sécurisé."
----
+
 
 # Théorie
 
@@ -34,11 +34,11 @@ confiance excessive aux données externes.
 ## Exemple simple
 
 Une application vulnérable construit un chemin comme ceci :
-
+---
 $file = $_GET['file'];  // "cv.pdf"
 $path = "/uploads/" . $file;
 readfile($path);
-
+----
 
 Un attaquant peut injecter :
 
@@ -46,8 +46,8 @@ Un attaquant peut injecter :
 
 Résultat : l'application lit /etc/passwd au lieu d'un fichier dans /uploads/.
 
-    Objectif pédagogique : comprendre que le contrôle d'accès aux fichiers doit être basé 
-    sur des listes de permissions explicites, et non sur des chemins fournis par l'utilisateur.
+Objectif pédagogique : comprendre que le contrôle d'accès aux fichiers doit être basé 
+sur des listes de permissions explicites, et non sur des chemins fournis par l'utilisateur.
 
 
 # Lab
@@ -56,13 +56,13 @@ Objectif du lab
 Observer comment une entrée utilisateur (paramètre de fichier) est utilisée pour accéder au système de fichiers, et réussir à lire des fichiers sensibles en dehors du répertoire autorisé.
 Règles
 
-    Pas de scanners automatiques
+- Pas de scanners automatiques
 
-    Comprendre la structure de répertoires attendue
+- Comprendre la structure de répertoires attendue
 
-    Tester progressivement les séquences de traversal
+- Tester progressivement les séquences de traversal
 
-    Documenter chaque fichier sensible découvert
+- Documenter chaque fichier sensible découvert
 
 Accès
 
